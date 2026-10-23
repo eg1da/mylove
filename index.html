@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0f3460">
+    <title>Для Леси</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            /* dvh — правильная высота на мобильных с учётом адресной строки */
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            /* Безопасные отступы для iPhone с "челкой" */
+            padding: env(safe-area-inset-top) env(safe-area-inset-right)
+                     env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            top: -50px;
+            animation: fall linear infinite;
+            opacity: 0.7;
+            will-change: transform;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110dvh) rotate(360deg);
+            }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            padding: 0 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-weight: 300;
+            line-height: 1.2;
+            letter-spacing: 1px;
+            text-shadow: 0 0 20px rgba(255, 77, 109, 0.8),
+                         0 0 40px rgba(255, 77, 109, 0.4);
+            /* clamp(мин, предпочтительно, макс) — шрифт сам подстраивается под ширину экрана */
+            font-size: clamp(1.6rem, 7vw, 2.8rem);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .name {
+            color: #ff4d6d;
+            font-weight: 700;
+            display: block;
+            font-size: clamp(2.6rem, 14vw, 4.5rem);
+            margin-bottom: 0.3em;
+            letter-spacing: 2px;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.04);
+                opacity: 0.9;
+            }
+        }
+
+        .heart-big {
+            display: block;
+            margin: 0.4em auto 0;
+            font-size: clamp(3.5rem, 18vw, 6rem);
+            line-height: 1;
+            animation: beat 1.2s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(255, 77, 109, 0.7));
+        }
+
+        @keyframes beat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.25); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); }
+            60% { transform: scale(1); }
+        }
+
+        .sub-text {
+            color: #a0a0b0;
+            margin-top: 1.2em;
+            letter-spacing: 1px;
+            font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+        }
+
+        /* На очень широких экранах (планшеты/ПК) ограничим размеры */
+        @media (min-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .name { font-size: 4rem; }
+            .heart-big { font-size: 6rem; }
+            .sub-text { font-size: 1.1rem; }
+        }
+
+        /* Для любителей "уменьшенного шрифта" в системе и тёмных тем */
+        @media (prefers-reduced-motion: reduce) {
+            .heart, h1, .heart-big { animation: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>
+            <span class="name">Леся</span>
+            я тебя люблю
+        </h1>
+        <span class="heart-big">❤️</span>
+        <p class="sub-text">...и это навсегда</p>
+    </div>
+
+    <script>
+        const heartEmojis = ['❤️', '💖', '💕', '💘', '💝', '🩷'];
+        // На мобильных меньше сердечек — чтобы не грузить телефон зря
+        const isMobile = window.matchMedia('(max-width: 767px)').matches;
+        const interval = isMobile ? 500 : 300;
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerText = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            heart.style.fontSize = (Math.random() * 14 + 14) + 'px';
+            heart.style.opacity = Math.random() * 0.5 + 0.3;
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 6500);
+        }
+
+        setInterval(createHeart, interval);
+    </script>
+
+</body>
+</html>
